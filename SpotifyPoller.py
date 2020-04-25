@@ -44,9 +44,10 @@ if __name__ == "__main__":
     while True:
         time.sleep(1)
         currentTrack = spotifyClient.current_user_playing_track()
-        #print(currentTrack)
-        if currentTrack is not None:
+        try:
             currentTitleAndArtist = getCurrentlyPlayingTitleAndArtist(currentTrack)
             if (updateCache(currentTitleAndArtist)):
                 url = search(urllib.parse.quote(currentTitleAndArtist))
                 webbrowser.open(url, new=0, autoraise=True)
+        except Exception as e:
+            print(e)
