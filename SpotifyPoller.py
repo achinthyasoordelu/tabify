@@ -19,8 +19,13 @@ def getCurrentlyPlayingTitleAndArtist(currentTrack):
     currentTrackName = currentTrack["item"]["name"]
     pattern = re.compile(r'\(.*\)')
     currentTrackName = pattern.sub(" ", currentTrackName)
-    currentTrackArtist = currentTrack["item"]["artists"][0]["name"] #TODO deal with multiple artists
+    currentTrackName = removeSpecialCharacters(currentTrackName)
+    currentTrackArtist = currentTrack["item"]["artists"][0]["name"]
+    currentTrackArtist = removeSpecialCharacters(currentTrackArtist)
     return currentTrackName + " " + currentTrackArtist
+
+def removeSpecialCharacters(trackString):
+    return trackString.replace("?", "")
 
 def getSpotifyClient(CLIENT_ID, CLIENT_SECRET):
     token = util.prompt_for_user_token("achinvitha",
