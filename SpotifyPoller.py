@@ -24,6 +24,13 @@ def getCurrentlyPlayingTitleAndArtist(currentTrack):
     currentTrackArtist = removeSpecialCharacters(currentTrackArtist)
     return currentTrackName + " " + currentTrackArtist
 
+def getCurrentlyPlayingKey(trackFeatures):
+    pitchClassConverter = ["C", "C#/D♭", "D", "D#/E♭", "E", "F", "F#/G♭", "G", "G#/A♭", "A", "A#/B♭", "B"]
+    key = trackFeatures["key"]
+    mode = "major" if trackFeatures["mode"] == 1 else "minor"
+    if key >= 0:
+        return "{} {}".format(pitchClassConverter[key], mode)
+
 def removeSpecialCharacters(trackString):
     return trackString.replace("?", "")
 
@@ -52,6 +59,8 @@ if __name__ == "__main__":
         try:
             currentTitleAndArtist = getCurrentlyPlayingTitleAndArtist(currentTrack)
             if (updateCache(currentTitleAndArtist)):
+                key = getCurrentlyPlayingKey(spotifyClient.audio_features(currentTrack["item"]["id"])[0])
+                print("{} in the key of {}".format(currentTitleAndArtist, key))
                 url = search(urllib.parse.quote(currentTitleAndArtist))
                 webbrowser.open(url, new=0, autoraise=True)
         except Exception as e:
